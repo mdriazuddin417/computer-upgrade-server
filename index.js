@@ -32,6 +32,11 @@ async function run() {
       const result = await partsCollection.find({}).toArray();
       res.send(result);
     });
+    app.post("/order-parts", async (req, res) => {
+      const parts = req.body;
+      const result = await orderCollection.insertOne({ ...parts });
+      res.send(result);
+    });
   } finally {
   }
 }
