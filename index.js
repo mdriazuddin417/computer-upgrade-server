@@ -28,6 +28,10 @@ async function run() {
       const result = await partsCollection.find({}).toArray();
       res.send(result);
     });
+    app.get("/all-reviews", async (req, res) => {
+      const result = await partsCollection.find({}).toArray();
+      res.send(result);
+    });
   } finally {
   }
 }
