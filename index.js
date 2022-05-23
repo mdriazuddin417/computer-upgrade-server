@@ -3,7 +3,7 @@
 const cors = require("cors");
 const express = require("express");
 const app = express();
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const port = process.env.PORT || 5000;
 require("dotenv").config();
 app.use(express.json());
@@ -28,10 +28,26 @@ async function run() {
       const result = await partsCollection.find({}).toArray();
       res.send(result);
     });
+
+    app.get("/part/:id", async (req, res) => {
+      const id = req.params.id;
+
+      const query = { _id: ObjectId(id) };
+      const result = await partsCollection.findOne(query);
+
+      res.send(result);
+    });
+
     app.get("/all-reviews", async (req, res) => {
       const result = await partsCollection.find({}).toArray();
       res.send(result);
     });
+
+    app.get("/order", async (req, res) => {
+      const result = await orderCollection.find({}).toArray();
+      res.send(result);
+    });
+
     app.post("/order-parts", async (req, res) => {
       const parts = req.body;
       const result = await orderCollection.insertOne({ ...parts });
