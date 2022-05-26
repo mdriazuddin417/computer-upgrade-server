@@ -24,7 +24,7 @@ const client = new MongoClient(uri, {
 });
 const verifyToken = (req, res, next) => {
   const authorization = req.headers.authorization;
-  console.log(authorization);
+
   if (!authorization) {
     return res.status(401).send({ message: "unauthorized" });
   }
@@ -56,7 +56,7 @@ async function run() {
     //verify admin
     const verifyAdmin = async (req, res, next) => {
       const requester = req?.decoded?.email;
-      console.log(requester);
+
       const requesterAccount = await userCollection.findOne({
         email: requester,
       });
@@ -126,16 +126,16 @@ async function run() {
       verifyAdmin,
       async (req, res) => {
         const email = req.params.email;
-        console.log(email);
+
         const role = req.body;
-        console.log(role);
+
         const filter = { email: email };
         const updatedDoc = {
           $set: { ...role },
         };
-        console.log(updatedDoc);
+
         const result = await userCollection.updateOne(filter, updatedDoc);
-        console.log(result);
+
         res.send(result);
       }
     );
