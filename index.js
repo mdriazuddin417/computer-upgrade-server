@@ -16,7 +16,7 @@ const stripe = require("stripe")(
 app.use(express.static("public"));
 app.use(express.json());
 
-const uri = `mongodb+srv${process.env.USER}:${process.env.PASS}//:@cluster0.we6w6.mongodb.net/?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${process.env.USER}:${process.env.PASS}@cluster0.we6w6.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
