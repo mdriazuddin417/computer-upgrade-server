@@ -6,6 +6,8 @@ const app = express();
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const port = process.env.PORT || 5000;
 const jwt = require("jsonwebtoken");
+const nodemailer = require("nodemailer");
+const mg = require("nodemailer-mailgun-transport");
 require("dotenv").config();
 app.use(express.json());
 app.use(cors());
@@ -38,6 +40,16 @@ const verifyToken = (req, res, next) => {
     next();
   });
 };
+
+//Email sender==============================
+const auth = {
+  auth: {
+    api_key: "15fe502ec8950abc8e2f1215d265f0f2-8d821f0c-83abcec7",
+    domain: "sandbox97d3f2e4987245f6b0d9d1b42b12ee33.mailgun.org",
+  },
+};
+const nodemailerMailgun = nodemailer.createTransport(mg(auth));
+//=====================================
 async function run() {
   try {
     await client.connect();
@@ -52,6 +64,27 @@ async function run() {
     const paymentCollection = client
       .db("computerUpgrade")
       .collection("payments");
+
+    //Email sender
+
+    // const email = {
+    //   from: "myemail@example.com",
+    //   to: "mdriazuddin417@gmail.com",
+    //   subject: "Hey you, awesome!",
+    //   text: "Mailgun rocks, pow pow!",
+    // };
+
+    // app.get("/email", async (req, res) => {
+    //   nodemailerMailgun.sendMail(email, (err, info) => {
+    //     if (err) {
+    //       console.log(err);
+    //     } else {
+    //       console.log(info);
+    //     }
+    //   });
+
+    //   res.send({ status: true });
+    // });
 
     //verify admin
     const verifyAdmin = async (req, res, next) => {
@@ -131,7 +164,7 @@ async function run() {
 
         const filter = { email: email };
         const updatedDoc = {
-          $set: { ...role },
+          $set: { ...role }
         };
 
         const result = await userCollection.updateOne(filter, updatedDoc);
